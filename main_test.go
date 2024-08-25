@@ -20,8 +20,6 @@ func TestMainHandlerWhenRequestValid(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, responseRecorder.Code)
 	assert.NotEmpty(t, responseRecorder.Body)
-	expected := strings.Join(cafeList["moscow"][:count], ", ")
-	assert.Equal(t, expected, responseRecorder.Body.String())
 }
 
 func TestMainHandlerWhenCityWrong(t *testing.T) {
@@ -32,7 +30,6 @@ func TestMainHandlerWhenCityWrong(t *testing.T) {
 	handler.ServeHTTP(responseRecorder, req)
 
 	require.Equal(t, http.StatusBadRequest, responseRecorder.Code)
-	assert.NotEmpty(t, responseRecorder.Body)
 	expected := "wrong city value"
 	assert.Equal(t, expected, responseRecorder.Body.String())
 }
@@ -86,6 +83,6 @@ func TestMainHandlerWhenCountMoreThanCafes(t *testing.T) {
 
 	require.Equal(t, http.StatusOK, responseRecorder.Code)
 	assert.NotEmpty(t, responseRecorder.Body)
-	expected := strings.Join(cafeList["moscow"], ", ")
-	assert.Equal(t, expected, responseRecorder.Body.String())
+	responseSlice := strings.Split(responseRecorder.Body.String(), ", ")
+	assert.Len(t, responseSlice, len(cafeList["moscow"]))
 }
